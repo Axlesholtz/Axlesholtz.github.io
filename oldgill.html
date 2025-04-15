@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Old Gill Quiz Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .quiz-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        h1 {
+            color: #0077cc;
+            text-align: center;
+        }
+        .gill-image {
+            display: block;
+            margin: 0 auto;
+            max-width: 300px;
+            border-radius: 10px;
+        }
+        .question {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .options {
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #d0d0d0;
+        }
+        .result {
+            font-size: 18px;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .score-display {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+        }
+        .restart-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .hide {
+            display: none;
+        }
+        .gill-quote {
+            font-style: italic;
+            text-align: center;
+            margin: 20px 0;
+            color: #6c757d;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #0077cc;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>"Oh boy..." Old Gill Quiz Game</h1>
+        <div class="gill-quote" id="random-quote">"Oh boy, here comes Gil's big chance to not mess up!"</div>
+        <img src="OG.jpg" alt="Old Gill" class="gill-image">
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
+        </div>
+        
+        <div id="question-container">
+            <div class="question" id="question-text">Loading question...</div>
+            <div class="options" id="options-container">
+                <!-- Options will be inserted here -->
+            </div>
+        </div>
+        
+        <div class="result hide" id="result"></div>
+        <div class="score-display" id="score">Score: 0/0</div>
+        
+        <button class="restart-btn hide" id="restart-btn">Try Again, Gil Needs Another Chance!</button>
+    </div>
+
+    <script>
+        // Quiz questions and answers
+        const quizData = [
+            {
+                question: "What is Gil Gunderson's occupation in most of his appearances?",
+                options: ["Insurance Salesman", "Real Estate Agent", "Car Salesman", "Various failed sales jobs"],
+                answer: "Various failed sales jobs",
+                explanation: "Gil has had numerous sales jobs throughout the series, almost all of which he struggles with."
+            },
+            {
+                question: "Which character was Gil Gunderson partially based on?",
+                options: ["Jack Lemmon's character in Glengarry Glen Ross", "Willy Loman from Death of a Salesman", "Arthur Miller's traveling salesman", "None of the above"],
+                answer: "Jack Lemmon's character in Glengarry Glen Ross",
+                explanation: "Gil is largely based on Jack Lemmon's character Shelley Levene from the film Glengarry Glen Ross."
+            },
+            {
+                question: "What is one of Gil's most famous catchphrases?",
+                options: ["D'oh!", "Ol' Gil is gonna make it this time!", "Excellent", "Ay, caramba!"],
+                answer: "Ol' Gil is gonna make it this time!",
+                explanation: "Gil often refers to himself in the third person and expresses desperate optimism about his chances of success."
+            },
+            {
+                question: "What did Gil briefly become in one episode before returning to sales?",
+                options: ["Mayor of Springfield", "Lisa's school counselor", "A bodyguard", "Krusty's agent"],
+                answer: "Lisa's school counselor",
+                explanation: "Gil briefly worked as a school counselor at Springfield Elementary School."
+            },
+            {
+                question: "What does Gil often lose when he's down on his luck?",
+                options: ["His car", "His home", "His dignity", "All of the above"],
+                answer: "All of the above",
+                explanation: "Poor Gil frequently loses everything - his housing situation is often precarious, he sometimes lives in his car, and he's constantly being humiliated."
+            },
+            {
+                question: "When Gil makes a successful sale, what typically happens?",
+                options: ["He becomes rich", "The sale falls through at the last minute", "Homer ruins it somehow", "Nothing - he never makes successful sales"],
+                answer: "The sale falls through at the last minute",
+                explanation: "In the rare cases when Gil seems to make a sale, something typically goes wrong at the last minute."
+            },
+            {
+                question: "Who did Gil stay with during Christmas in the episode 'Kill Gil, Volumes I & II'?",
+                options: ["The Simpsons", "Ned Flanders", "Mr. Burns", "Moe"],
+                answer: "The Simpsons",
+                explanation: "Gil stayed with the Simpsons during Christmas and overstayed his welcome, with Marge unable to ask him to leave."
+            },
+            {
+                question: "What is Gil's voice actor?",
+                options: ["Dan Castellaneta", "Hank Azaria", "Harry Shearer", "Yeardley Smith"],
+                answer: "Dan Castellaneta",
+                explanation: "Gil is voiced by Dan Castellaneta, who also voices Homer Simpson and many other characters."
+            },
+            {
+                question: "What is Gil's last name?",
+                options: ["Gunderson", "Gibson", "Glengarry", "Grumble"],
+                answer: "Gunderson",
+                explanation: "Gil's full name is Gil Gunderson."
+            },
+            {
+                question: "What does Gil often compare himself to when things go wrong?",
+                options: ["A lemon", "A broken record", "A dead fish", "Yesterday's newspaper"],
+                answer: "Yesterday's newspaper",
+                explanation: "Gil often makes self-deprecating comments comparing himself to things that are worthless or disposable."
+            }
+        ];
+
+        // Gil's sad quotes
+        const gillQuotes = [
+            "Oh boy, here comes Gil's big chance to not mess up!",
+            "Ol' Gil needs this one...",
+            "Please don't hang up, I need this!",
+            "The wife's gonna kill me...",
+            "Aw, I was counting on that commission!",
+            "Just give ol' Gil a chance...",
+            "C'mon, help ol' Gil out here...",
+            "Oh, I shouldn't have bought that mansion!",
+            "I'm one hot meal away from happiness!",
+            "I've been living in my car for three months!"
+        ];
+
+        // Variables
+        let currentQuestion = 0;
+        let score = 0;
+        let quizEnded = false;
+
+        // DOM Elements
+        const questionContainer = document.getElementById('question-container');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const resultElement = document.getElementById('result');
+        const scoreDisplay = document.getElementById('score');
+        const restartBtn = document.getElementById('restart-btn');
+        const progressBar = document.getElementById('progress');
+        const quoteElement = document.getElementById('random-quote');
+
+        // Function to show a random Gil quote
+        function showRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * gillQuotes.length);
+            quoteElement.textContent = `"${gillQuotes[randomIndex]}"`;
+        }
+
+        // Function to load a question
+        function loadQuestion() {
+            // Reset result
+            resultElement.classList.add('hide');
+            resultElement.textContent = '';
+
+            // Update progress bar
+            const progressPercentage = (currentQuestion / quizData.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+
+            // Show a new random quote
+            showRandomQuote();
+
+            // Get current question data
+            const currentQuizData = quizData[currentQuestion];
+            questionText.textContent = currentQuizData.question;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            
+            // Create new option buttons
+            currentQuizData.options.forEach(option => {
+                const button = document.createElement('button');
+                button.classList.add('option');
+                button.textContent = option;
+                button.addEventListener('click', () => selectAnswer(option));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Function to handle answer selection
+        function selectAnswer(selectedOption) {
+            if (quizEnded) return;
+            
+            const currentQuizData = quizData[currentQuestion];
+            const isCorrect = selectedOption === currentQuizData.answer;
+            
+            // Disable all option buttons
+            const optionButtons = document.querySelectorAll('.option');
+            optionButtons.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === currentQuizData.answer) {
+                    button.style.backgroundColor = '#d4edda';
+                }
+                if (button.textContent === selectedOption && !isCorrect) {
+                    button.style.backgroundColor = '#f8d7da';
+                }
+            });
+            
+            // Show result
+            resultElement.classList.remove('hide');
+            resultElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            
+            if (isCorrect) {
+                resultElement.textContent = `Correct! ${currentQuizData.explanation}`;
+                score++;
+            } else {
+                resultElement.textContent = `Sorry, that's wrong. The correct answer is "${currentQuizData.answer}". ${currentQuizData.explanation}`;
+            }
+            
+            // Update score
+            scoreDisplay.textContent = `Score: ${score}/${currentQuestion + 1}`;
+            
+            // Move to next question after a delay
+            setTimeout(() => {
+                currentQuestion++;
+                
+                if (currentQuestion < quizData.length) {
+                    loadQuestion();
+                } else {
+                    // End of quiz
+                    quizEnded = true;
+                    questionContainer.classList.add('hide');
+                    resultElement.classList.remove('hide', 'correct', 'incorrect');
+                    
+                    const finalScore = (score / quizData.length) * 100;
+                    let message;
+                    
+                    if (finalScore >= 90) {
+                        message = "Amazing! You're a true Simpsons expert! Even Gil would be impressed!";
+                    } else if (finalScore >= 70) {
+                        message = "Great job! You know Ol' Gil pretty well!";
+                    } else if (finalScore >= 50) {
+                        message = "Not bad! Gil's had worse days than this!";
+                    } else {
+                        message = "Aw, that's the Gil Gunderson of quiz scores... but don't give up!";
+                    }
+                    
+                    resultElement.textContent = `Quiz completed! Your final score is ${score}/${quizData.length} (${Math.round(finalScore)}%). ${message}`;
+                    restartBtn.classList.remove('hide');
+                }
+            }, 2000);
+        }
+
+        // Function to restart the quiz
+        restartBtn.addEventListener('click', () => {
+            currentQuestion = 0;
+            score = 0;
+            quizEnded = false;
+            
+            questionContainer.classList.remove('hide');
+            restartBtn.classList.add('hide');
+            
+            scoreDisplay.textContent = 'Score: 0/0';
+            loadQuestion();
+        });
+
+        // Initialize the quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
