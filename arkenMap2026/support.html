@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ArkenMap — Support</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.55; max-width: 42rem; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; }
+    h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .meta { color: #666; font-size: 0.9rem; margin-bottom: 2rem; }
+    h2 { font-size: 1.15rem; margin-top: 1.75rem; }
+    p, li { margin: 0.6rem 0; }
+    ul { padding-left: 1.25rem; }
+    a { color: inherit; }
+    .box { border: 1px solid #ccc; border-radius: 8px; padding: 1rem 1.1rem; margin: 1.25rem 0; background: rgba(127,127,127,0.06); }
+  </style>
+</head>
+<body>
+  <h1>ArkenMap Support</h1>
+  <p class="meta">iOS app · Georeferenced PDF maps and on-map location</p>
+
+  <div class="box">
+    <strong>Get help:</strong> Report bugs, ask questions, or request features on
+    <a href="https://github.com/Axlesholtz/arkenmap-support/issues">GitHub Issues</a>
+    (free GitHub account required to post). We use that inbox as our primary support channel.
+  </div>
+
+  <p>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    ·
+    <a href="https://github.com/Axlesholtz/arkenmap-support">Project repository</a>
+  </p>
+
+  <h2>What ArkenMap does</h2>
+  <p>
+    ArkenMap lets you <strong>import PDF maps</strong> that include georeference information (for example GeoPDF-style measure data),
+    view them full screen, and optionally show <strong>your current location</strong> on the map when you allow Location access.
+    Your imported maps are stored <strong>on your device</strong>.
+  </p>
+
+  <h2>Common issues</h2>
+  <ul>
+    <li><strong>Location dot missing or wrong.</strong> In iOS Settings → Privacy &amp; Security → Location Services, ensure Location is on for ArkenMap and set to “While Using the App” (or broader if you choose). On the simulator, set a custom location under Features → Location. GPS accuracy depends on your environment; PDF alignment depends on how the map was georeferenced.</li>
+    <li><strong>Map doesn’t line up with GPS.</strong> The app interprets coordinates embedded in the PDF. If the publisher used a different datum or projection than the app expects, you may see a shift. Try re-exporting the PDF with clear CRS metadata from your GIS tool, or open an issue with a minimal example if you think it’s a bug.</li>
+    <li><strong>PDF imports but isn’t “geo”.</strong> ArkenMap needs georeferencing metadata in the PDF (not just a picture of a map). Flattened or scanned PDFs without measure/GPTS-style data won’t support the blue-dot overlay.</li>
+    <li><strong>Import fails or file won’t open.</strong> Try importing again from the Files app. Very large PDFs may be slow on older devices.</li>
+  </ul>
+
+  <h2>Feature requests</h2>
+  <p>
+    Suggestions are welcome on
+    <a href="https://github.com/Axlesholtz/arkenmap-support/issues">GitHub Issues</a>.
+    Describe your use case (e.g. coordinate system, data source) so we can prioritize.
+  </p>
+
+  <h2>About this page</h2>
+  <p class="meta">
+    This page is the official support URL for ArkenMap on the App Store.
+    Last updated: April 1, 2026.
+  </p>
+</body>
+</html>
